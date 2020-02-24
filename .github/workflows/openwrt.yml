@@ -11,11 +11,11 @@ name: Build OpenWrt WizFi630S
 on:
   release:
     types: [published]
-#  push:
-#    branches:
-#      - master
-#    paths:
-#      - '.config'
+  push:
+    branches:
+      - master
+    paths:
+      - '.config'
 #  schedule:
 #    - cron: 0 8 * * 5
 #  watch:
@@ -30,7 +30,7 @@ env:
   SSH_ACTIONS: false
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
-  TZ: Asia/Seoul
+  TZ: Asia/Shanghai
 
 jobs:
   build:
