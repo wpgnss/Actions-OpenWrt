@@ -27,6 +27,8 @@ on:
 env:
   REPO_URL: https://github.com/openwrt/openwrt
   REPO_BRANCH: openwrt-18.06
+  FEEDS_URL: https://github.com/wpgnss/WizFi630S-openwrt18-feeds
+  FEEDS_BRANCH: master
   CONFIG_FILE: .config
   DIY_SH: diy.sh
   FREE_UP_DISK: false
@@ -67,6 +69,12 @@ jobs:
       run: git clone --depth 1 -b $REPO_BRANCH --single-branch $REPO_URL openwrt
 #       run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
 
+    - name: Download custom feeds
+      run: |
+        [ -e $FEEDS_URL ] && cp openwrt/feeds.conf.default openwrt/feeds.conf
+        echo "src-git wizfi630s_feeds $(FEEDS_URL)" >> openwrt/feeds.conf
+     
+
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
 
@@ -81,16 +89,16 @@ jobs:
 #         cd openwrt
 #         ../$DIY_SH
 #         make defconfig
-    - name: SSH connection to Actions
-      uses: P3TERX/debugger-action@master
-      if: env.SSH_ACTIONS == 'true'
-
-    - name: Download package
-      id: package
-      run: |
-        make download -j8
-        find dl -size -1024c -exec ls -l {} \;
-        find dl -size -1024c -exec rm -f {} \;
+#    - name: SSH connection to Actions
+#      uses: P3TERX/debugger-action@master
+#      if: env.SSH_ACTIONS == 'true'
+#
+#    - name: Download package
+#      id: package
+#      run: |
+#        make download -j8
+#        find dl -size -1024c -exec ls -l {} \;
+#        find dl -size -1024c -exec rm -f {} \;
 #     - name: Compile the firmware
 #       id: compile
 #       run: |
